@@ -36,6 +36,27 @@ inject_managed_block() {
     echo "Managed block injected into $dest"
 }
 
+link_config() {
+    local src="$1"
+    local dest="$2"
+
+    if [[ -L "$dest" ]]; then
+        if [[ "$(readlink "$dest")" == "$src" ]]; then
+            echo "Symlink already in place: $dest -> $src"
+            return
+        fi
+        rm "$dest"
+    elif [[ -e "$dest" ]]; then
+        local backup="${dest}.backup.$(date +%Y%m%d%H%M%S)"
+        echo "Backing up existing $dest -> $backup"
+        mv "$dest" "$backup"
+    fi
+
+    mkdir -p "$(dirname "$dest")"
+    ln -s "$src" "$dest"
+    echo "Linked $dest -> $src"
+}
+
 if ! command -v brew >/dev/null 2>&1; then
     echo "Homebrew not found. Installing..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -68,3 +89,7 @@ else
 fi
 
 inject_managed_block "$REPO_DIR/dotfiles/zshrc" "$HOME/.zshrc"
+
+link_config "$REPO_DIR/dotfiles/wezterm/wezterm.lua" "$HOME/.wezterm.lua"
+link_config "$REPO_DIR/dotfiles/vim/vimrc" "$HOME/.vimrc"
+link_config "$REPO_DIR/dotfiles/nvim" "$HOME/.config/nvim"

@@ -6,5 +6,7 @@ brew "eza"
 brew "zoxide"
 brew "starship"
 brew "gnupg"
+brew "neovim"
+brew "vim"
 
 cask "wezterm"
