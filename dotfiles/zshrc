@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/personal/gitws/setup/dotfiles}"
+
+for f in "$DOTFILES_DIR"/zshrc.d/*.zsh(N); do
+  source "$f"
+done
+
+case "$(uname -s)" in
+  Darwin) [[ -f "$DOTFILES_DIR/zshrc.d/os/macos.zsh" ]] && source "$DOTFILES_DIR/zshrc.d/os/macos.zsh" ;;
+  Linux)  [[ -f "$DOTFILES_DIR/zshrc.d/os/linux.zsh" ]] && source "$DOTFILES_DIR/zshrc.d/os/linux.zsh" ;;
+esac
+
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

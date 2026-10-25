@@ -1,2 +1,10 @@
 brew "herdr"
+brew "fzf"
+brew "fd"
+brew "bat"
+brew "eza"
+brew "zoxide"
+brew "starship"
+brew "gnupg"
+
 cask "wezterm"
