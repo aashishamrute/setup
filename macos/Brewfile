@@ -10,3 +10,6 @@ brew "neovim"
 brew "vim"
 
 cask "wezterm"
+cask "visual-studio-code"
+cask "firefox"
+cask "brave-browser"
