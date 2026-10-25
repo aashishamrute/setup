@@ -57,6 +57,10 @@ link_config() {
     echo "Linked $dest -> $src"
 }
 
+echo "Requesting sudo access upfront..."
+sudo -v
+while true; do sudo -n true; sleep 60; kill -0 "$$" 2>/dev/null || exit; done 2>/dev/null &
+
 if ! command -v brew >/dev/null 2>&1; then
     echo "Homebrew not found. Installing..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
