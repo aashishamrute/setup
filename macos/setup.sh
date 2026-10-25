@@ -79,6 +79,13 @@ else
     echo "SDKMAN is already installed."
 fi
 
+if [[ ! -d "$HOME/.nvm" ]]; then
+    echo "nvm not found. Installing..."
+    curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh" | bash
+else
+    echo "nvm is already installed."
+fi
+
 FZF_GIT_DIR="$HOME/personal/tool/fzf-git.sh"
 if [[ ! -d "$FZF_GIT_DIR" ]]; then
     echo "Cloning fzf-git.sh..."
@@ -88,8 +95,18 @@ else
     echo "fzf-git.sh is already installed."
 fi
 
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+if [[ ! -d "$TPM_DIR" ]]; then
+    echo "Cloning TPM (Tmux Plugin Manager)..."
+    mkdir -p "$(dirname "$TPM_DIR")"
+    git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+else
+    echo "TPM is already installed."
+fi
+
 inject_managed_block "$REPO_DIR/dotfiles/zshrc" "$HOME/.zshrc"
 
 link_config "$REPO_DIR/dotfiles/wezterm/wezterm.lua" "$HOME/.wezterm.lua"
 link_config "$REPO_DIR/dotfiles/vim/vimrc" "$HOME/.vimrc"
 link_config "$REPO_DIR/dotfiles/nvim" "$HOME/.config/nvim"
+link_config "$REPO_DIR/dotfiles/tmux/tmux.conf" "$HOME/.tmux.conf"
