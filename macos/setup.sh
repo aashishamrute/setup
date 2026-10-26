@@ -57,6 +57,46 @@ link_config() {
     echo "Linked $dest -> $src"
 }
 
+apply_configs() {
+    inject_managed_block "$REPO_DIR/dotfiles/zshrc" "$HOME/.zshrc"
+
+    link_config "$REPO_DIR/dotfiles/wezterm/wezterm.lua" "$HOME/.wezterm.lua"
+    link_config "$REPO_DIR/dotfiles/vim/vimrc" "$HOME/.vimrc"
+    link_config "$REPO_DIR/dotfiles/nvim" "$HOME/.config/nvim"
+    link_config "$REPO_DIR/dotfiles/tmux/tmux.conf" "$HOME/.tmux.conf"
+}
+
+MODE="all"
+if [[ $# -gt 0 ]]; then
+    case "$1" in
+        --configs-only|configs|config)
+            MODE="configs"
+            ;;
+        --all|all)
+            MODE="all"
+            ;;
+        -h|--help|help)
+            cat <<EOF
+Usage: $0 [all|configs]
+
+  all       (default) Install Homebrew, packages, SDKMAN, nvm, TPM, and link configs.
+  configs   Only link dotfiles / inject managed shell block. No installs, no sudo.
+EOF
+            exit 0
+            ;;
+        *)
+            echo "Unknown argument: $1" >&2
+            echo "Run '$0 --help' for usage." >&2
+            exit 1
+            ;;
+    esac
+fi
+
+if [[ "$MODE" == "configs" ]]; then
+    apply_configs
+    exit 0
+fi
+
 echo "Requesting sudo access upfront..."
 sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" 2>/dev/null || exit; done 2>/dev/null &
@@ -108,9 +148,4 @@ else
     echo "TPM is already installed."
 fi
 
-inject_managed_block "$REPO_DIR/dotfiles/zshrc" "$HOME/.zshrc"
-
-link_config "$REPO_DIR/dotfiles/wezterm/wezterm.lua" "$HOME/.wezterm.lua"
-link_config "$REPO_DIR/dotfiles/vim/vimrc" "$HOME/.vimrc"
-link_config "$REPO_DIR/dotfiles/nvim" "$HOME/.config/nvim"
-link_config "$REPO_DIR/dotfiles/tmux/tmux.conf" "$HOME/.tmux.conf"
+apply_configs
