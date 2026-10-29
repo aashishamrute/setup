@@ -64,6 +64,7 @@ apply_configs() {
     link_config "$REPO_DIR/dotfiles/vim/vimrc" "$HOME/.vimrc"
     link_config "$REPO_DIR/dotfiles/nvim" "$HOME/.config/nvim"
     link_config "$REPO_DIR/dotfiles/tmux/tmux.conf" "$HOME/.tmux.conf"
+    link_config "$REPO_DIR/dotfiles/gitconfig" "$HOME/.gitconfig"
 }
 
 MODE="all"
